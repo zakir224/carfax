@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CarFax</string>
+    <string name="call_dealer_btn_text">CALL DEALER</string>
+    <string name="location_place_holder">Los Angels, CA</string>
+    <string name="mileage_placeholder">39k mi</string>
+    <string name="vertical_divider">|</string>
+    <string name="price_placeholder">17000</string>
+    <string name="dollar_sign">$</string>
+    <string name="car_name_placeholder">BMW 2009 I8</string>
+</resources>
