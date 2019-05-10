@@ -10,7 +10,7 @@ import com.zakir.carfax.data.Vehicle
     entities = [Vehicle.Listing::class, Vehicle.Dealer::class,
         Vehicle.SearchArea::class], version = 2
 )
-abstract class VehicleDatabase : RoomDatabase() {
+abstract class VehicleDatabase: RoomDatabase() {
     abstract fun vehicleListingDao(): VehicleDao
     abstract fun vehicleAreaDao(): VehicleSearchDao
     abstract fun vehicleDealerDao(): VehicleDealerDao

@@ -49,11 +49,11 @@ class AppRemoteDataSource private constructor() : RemoteDataSource {
         private var INSTANCE: AppRemoteDataSource? = null
         private const val API_END_POINT = "https://carfax-for-consumers.firebaseio.com/"
 
-        fun instance(): DataSource {
+        fun instance(): RemoteDataSource {
             if (INSTANCE == null) {
                 INSTANCE = AppRemoteDataSource()
             }
-            return INSTANCE as DataSource
+            return INSTANCE as RemoteDataSource
         }
     }
 }

@@ -105,6 +105,7 @@ class AppLocalDataSource private constructor(
                     dealerDao.addDealer(vehicle.dealer!!)
                 }
                 vehicle.dealerId = savedDealer
+                vehicle.firstPhoto = vehicle.images?.firstPhoto?.large
                 vehicleDao.addListing(vehicle)
             }
             searchDao.addSearchArea(result.searchArea)

@@ -44,7 +44,8 @@ object Vehicle {
         var engine: String,
         var drivetype: String,
         var transmission: String,
-        var bodytype: String
+        var bodytype: String,
+        var firstPhoto: String?
     ) {
 
         @Ignore var images: Image? = null
