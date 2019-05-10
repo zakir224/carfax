@@ -130,4 +130,13 @@ class AppLocalDataSource private constructor(
             return INSTANCE as AppLocalDataSource
         }
     }
+
+    override fun getVehicle(id: String, loadDealerCallback: DataSource.LoadVehicleCallback) {
+        val runnable = Runnable {
+            val vehicle = vehicleDao.findById(id)
+            loadDealerCallback.onVehicleLoaded(vehicle)
+        }
+
+        appExecutors.diskIO().execute(runnable)
+    }
 }

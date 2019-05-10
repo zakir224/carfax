@@ -43,6 +43,7 @@ object Vehicle {
         var interiorColor: String,
         var engine: String,
         var drivetype: String,
+        var fuel: String,
         var transmission: String,
         var bodytype: String,
         var firstPhoto: String?

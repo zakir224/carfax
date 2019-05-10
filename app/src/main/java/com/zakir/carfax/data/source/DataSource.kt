@@ -7,6 +7,7 @@ interface DataSource {
 
     interface LoadVehicleCallback {
         fun onVehicleLoaded(result: Vehicle.Result)
+        fun onVehicleLoaded(vehicle: Vehicle.Listing)
         fun onDataNotAvailable()
     }
 
@@ -22,6 +23,7 @@ interface DataSource {
         fun onAreaNotAvailable()
     }
 
+    fun getVehicle(id: String, loadDealerCallback: LoadVehicleCallback)
     fun getVehicles(loadVehicleCallback: LoadVehicleCallback)
     fun refreshTasks()
 }

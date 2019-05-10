@@ -45,6 +45,10 @@ class VehicleListViewModel(val mRepository: Repository) : ViewModel() {
 
     private fun loadVehicles() {
         mRepository.getVehicles(object : DataSource.LoadVehicleCallback {
+            override fun onVehicleLoaded(vehicle: Vehicle.Listing) {
+
+            }
+
             override fun onVehicleLoaded(result: Vehicle.Result) {
                 mVehicleListings?.postValue(result.listings as List<Vehicle.Listing>?)
             }

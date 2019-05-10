@@ -56,4 +56,8 @@ class AppRemoteDataSource private constructor() : RemoteDataSource {
             return INSTANCE as RemoteDataSource
         }
     }
+
+    override fun getVehicle(id: String, loadDealerCallback: DataSource.LoadVehicleCallback) {
+
+    }
 }

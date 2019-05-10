@@ -8,6 +8,10 @@ class Repository private constructor(
     private var mRemoteDataSource: RemoteDataSource,
     private var mLocalDataSource: LocalDataSource
 ) : LocalDataSource, RemoteDataSource {
+    override fun getVehicle(id: String, loadDealerCallback: DataSource.LoadVehicleCallback) {
+        mLocalDataSource.getVehicle(id, loadDealerCallback)
+    }
+
     override fun saveResult(result: Vehicle.Result) {
         mLocalDataSource.saveResult(result)
     }
@@ -68,6 +72,10 @@ class Repository private constructor(
             getTasksFromRemoteDataSource(loadVehicleCallback)
         } else {
             mLocalDataSource.getVehicles(object : DataSource.LoadVehicleCallback {
+                override fun onVehicleLoaded(vehicle: Vehicle.Listing) {
+
+                }
+
                 override fun onVehicleLoaded(result: Vehicle.Result) {
                     refreshCache(result)
                     loadVehicleCallback.onVehicleLoaded(mCachedResponse!!)
@@ -82,6 +90,10 @@ class Repository private constructor(
 
     private fun getTasksFromRemoteDataSource(callback: DataSource.LoadVehicleCallback) {
         mRemoteDataSource.getVehicles(object : DataSource.LoadVehicleCallback {
+            override fun onVehicleLoaded(vehicle: Vehicle.Listing) {
+
+            }
+
             override fun onVehicleLoaded(result: Vehicle.Result) {
                 refreshCache(result)
                 refreshLocalDataSource(result)

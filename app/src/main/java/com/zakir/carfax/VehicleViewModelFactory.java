@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.zakir.carfax.data.source.Repository;
 import com.zakir.carfax.util.Injection;
 import com.zakir.carfax.vehicles.VehicleListViewModel;
+import com.zakir.carfax.vehicles.details.VehicleDetailsViewModel;
 import org.jetbrains.annotations.NotNull;
 
 public class VehicleViewModelFactory extends ViewModelProvider.NewInstanceFactory {
@@ -37,6 +38,9 @@ public class VehicleViewModelFactory extends ViewModelProvider.NewInstanceFactor
         if (modelClass.isAssignableFrom(VehicleListViewModel.class)) {
             //noinspection unchecked
             return (T) new VehicleListViewModel(mVehicleRepository);
+        } else if (modelClass.isAssignableFrom(VehicleDetailsViewModel.class)) {
+            //noinspection unchecked
+            return (T) new VehicleDetailsViewModel(mVehicleRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }

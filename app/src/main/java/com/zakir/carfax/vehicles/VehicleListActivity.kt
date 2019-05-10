@@ -15,6 +15,7 @@ import com.zakir.carfax.vehicles.details.VehicleDetailsActivity
 
 
 class VehicleListActivity : AppCompatActivity(), VehicleAdapter.VehicleItemClickListener {
+
     override fun onCallButtonClick(phoneNumber: String) {
         mViewModel.onCallButtonClick(phoneNumber)
     }
@@ -68,7 +69,7 @@ class VehicleListActivity : AppCompatActivity(), VehicleAdapter.VehicleItemClick
 
     public fun openDetailsActivity(id: String) {
         val intent = Intent(this, VehicleDetailsActivity::class.java)
-        intent.putExtra("listing_id", id)
+        intent.putExtra(VEHICLE, id)
         startActivity(intent)
     }
 
@@ -85,5 +86,8 @@ class VehicleListActivity : AppCompatActivity(), VehicleAdapter.VehicleItemClick
         return ViewModelProviders.of(activity, mVehicleViewModelFactory).get(VehicleListViewModel::class.java)
     }
 
+    companion object {
+        const val VEHICLE: String = "vehicle_id"
+    }
 
 }
