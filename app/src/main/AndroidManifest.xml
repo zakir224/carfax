@@ -12,7 +12,7 @@
             android:supportsRtl="true"
             android:theme="@style/CarFaxTheme">
         <activity
-                android:launchMode="singleInstance"
+                android:launchMode="singleTask"
                 android:name=".vehicles.details.VehicleDetailsActivity">
         </activity>
         <activity android:name=".vehicles.VehicleListActivity">
