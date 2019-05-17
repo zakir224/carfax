@@ -8,47 +8,76 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.zakir.carfax.R
 import com.zakir.carfax.VehicleViewModelFactory
 import com.zakir.carfax.data.Vehicle
+import com.zakir.carfax.databinding.ActivityVehicleDetailsBinding
 import com.zakir.carfax.vehicles.VehicleListActivity
 
-class VehicleDetailsActivity : AppCompatActivity() {
+class VehicleDetailsActivity : AppCompatActivity(), LifecycleOwner {
 
+    private lateinit var mDetailBinding: ActivityVehicleDetailsBinding
     private lateinit var mViewModel: VehicleDetailsViewModel
-    private lateinit var mVehicleImageView: ImageView
-    private lateinit var mVehicleTitleView: TextView
-    private lateinit var mVehiclePriceView: TextView
-    private lateinit var mVehicleMileageView: TextView
-    private lateinit var mVehicleLocationView: TextView
-    private lateinit var mVehicleExteriorColorView: TextView
-    private lateinit var mVehicleInteriorColorView: TextView
-    private lateinit var mVehicleBodyTypeView: TextView
-    private lateinit var mVehicleDriveTypeView: TextView
-    private lateinit var mVehicleTransmissionView: TextView
-    private lateinit var mVehicleFuelView: TextView
-    private lateinit var mCallDealerButton: Button
     private lateinit var mPhoneNumber: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_vehicle_details)
-
-        setupViews()
+        mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_vehicle_details)
         mViewModel = obtainViewModel(this)
 
         setupObservers()
         setVehicle(intent)
-
     }
 
     private fun setupObservers() {
         mViewModel.getVehicle().observe(this, Observer {
-            updateViews(it)
+            updateView(it)
         })
+
+        mViewModel.getDealer().observe(this, Observer {
+            val location = """${it?.city}, ${it?.state}"""
+            mDetailBinding.location = location
+            mPhoneNumber = it?.phone!!
+        })
+
+        mViewModel.shouldCallDealer().observe(this, Observer {
+            if (it) {
+                callPhone()
+                mViewModel.setDealerCallDone()
+            }
+        })
+    }
+
+    private fun updateView(it: Vehicle.Listing?) {
+        val title = """${it?.make} ${it?.model} ${it?.year} ${it?.trim}"""
+        val mileage = "${it?.mileage} mi"
+        this.title = title
+
+        mDetailBinding.title = title
+        mDetailBinding.mileage = mileage
+        mDetailBinding.price = """${it?.currentPrice}"""
+        mDetailBinding.bodyStyle = it?.bodytype
+        mDetailBinding.driveType = it?.drivetype
+        mDetailBinding.exteriorColor = it?.exteriorColor
+        mDetailBinding.interiorColor = it?.interiorColor
+        mDetailBinding.transmission = it?.transmission
+        mDetailBinding.fuel = it?.fuel
+
+        if (it?.firstPhoto != null) {
+            Glide.with(this)
+                .load(it.firstPhoto)
+                .centerCrop()
+                .into(mDetailBinding.vehicleImageView)
+        }
+
+        mDetailBinding.callDealerButton.setOnClickListener {
+            mViewModel.onCallButtonClick()
+        }
     }
 
     private fun setVehicle(intent: Intent?) {
@@ -65,63 +94,10 @@ class VehicleDetailsActivity : AppCompatActivity() {
         ).get(VehicleDetailsViewModel::class.java)
     }
 
-    private fun updateViews(it: Vehicle.Listing?) {
-        val title = """${it?.make} ${it?.model} ${it?.year} ${it?.trim}"""
-        val mileage = "${it?.mileage} mi"
-
-        this.title = title
-        mVehicleTitleView.text = title
-        mVehiclePriceView.text = """${it?.currentPrice}"""
-        mVehicleMileageView.text = mileage
-        mVehicleExteriorColorView.text = it?.exteriorColor
-        mVehicleInteriorColorView.text = it?.interiorColor
-        mVehicleBodyTypeView.text = it?.bodytype
-        mVehicleDriveTypeView.text = it?.drivetype
-        mVehicleTransmissionView.text = it?.transmission
-        mVehicleFuelView.text = it?.fuel
-
-        mViewModel.getDealer(it?.dealerId!!).observe(this, Observer {
-            val location = """${it?.city}, ${it?.state}"""
-            mVehicleLocationView.text = location
-            mPhoneNumber = it?.phone!!
-        })
-
-        mViewModel.shouldCallDealer().observe(this, Observer {
-            if (it) {
-                callPhone()
-                mViewModel.setDealerCallDone()
-            }
-        })
-
-        if (it.firstPhoto != null) {
-            Glide.with(this)
-                .load(it.firstPhoto)
-                .into(mVehicleImageView)
-        }
-
-        mCallDealerButton.setOnClickListener {
-            mViewModel.onCallButtonClick()
-        }
-    }
-
     private fun callPhone() {
         val intent = Intent(Intent.ACTION_DIAL)
         intent.data = Uri.parse("tel:$mPhoneNumber")
         startActivity(intent)
     }
 
-    private fun setupViews() {
-        mVehicleImageView = findViewById(R.id.vehicleImageView)
-        mVehicleTitleView = findViewById(R.id.vehicleTitleTextView)
-        mVehiclePriceView = findViewById(R.id.vehiclePriceTextView)
-        mVehicleMileageView = findViewById(R.id.vehicleMileageTextView)
-        mVehicleLocationView = findViewById(R.id.vehicleLocationTextView)
-        mVehicleExteriorColorView = findViewById(R.id.exteriorColorTextView)
-        mVehicleInteriorColorView = findViewById(R.id.interiorColorTextView)
-        mVehicleBodyTypeView = findViewById(R.id.bodyStyleTextView)
-        mVehicleDriveTypeView = findViewById(R.id.driveTypeTextView)
-        mVehicleTransmissionView = findViewById(R.id.transmissionTextView)
-        mVehicleFuelView = findViewById(R.id.fuelTextView)
-        mCallDealerButton = findViewById(R.id.callDealerButton)
-    }
 }

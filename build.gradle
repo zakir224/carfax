@@ -26,3 +26,28 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+
+    minSdkVersion = 21
+    targetSdkVersion = 28
+    compileSdkVersion = 28
+    versionCode = 1
+    versionName ="1.0"
+
+    appCompatVersion = "1.1.0-alpha05"
+    ktxVersion = "1.2.0-alpha01"
+    constraingLayoutVersion = "2.0.0-beta1"
+    cardViewVersion = "1.0.0"
+    roomVersion = '2.1.0-beta01'
+    lifeCycleVersion = "2.0.0"
+
+    retrofitVersion = "2.5.0"
+    gsonConverterVersion = "2.5.0"
+    glideVersion = "4.9.0"
+
+    testCoreVersion = "1.2.0-beta01"
+    jUnitVersion = "1.1.1-beta01"
+    testRunnerVersion = "1.2.0-beta01"
+    espressoVersion = "3.2.0-beta01"
+}

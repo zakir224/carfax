@@ -35,16 +35,18 @@ class VehicleDetailsViewModel(private val mVehicleRepository: Repository) : View
         mCallDealer?.postValue(false)
     }
 
-    fun getDealer(id: Long): LiveData<Vehicle.Dealer> {
+    fun getDealer(): LiveData<Vehicle.Dealer> {
         if(mVehicleDealer == null) {
             mVehicleDealer = MutableLiveData()
-            fetchDealer(id)
         }
 
         return mVehicleDealer!!
     }
 
     private fun fetchDealer(id: Long) {
+        if (id == 0L)
+            return
+
         mVehicleRepository.getDealer(id, object: DataSource.LoadDealerCallback{
             override fun onDealersLoaded(result: List<Vehicle.Dealer>) {
 
@@ -73,6 +75,7 @@ class VehicleDetailsViewModel(private val mVehicleRepository: Repository) : View
 
             override fun onVehicleLoaded(vehicle: Vehicle.Listing) {
                 mVehicleListing?.postValue(vehicle)
+                fetchDealer(vehicle.dealerId)
             }
 
             override fun onDataNotAvailable() {
