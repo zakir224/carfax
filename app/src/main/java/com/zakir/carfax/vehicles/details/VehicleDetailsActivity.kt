@@ -19,7 +19,7 @@ import com.zakir.carfax.data.Vehicle
 import com.zakir.carfax.databinding.ActivityVehicleDetailsBinding
 import com.zakir.carfax.vehicles.VehicleListActivity
 
-class VehicleDetailsActivity : AppCompatActivity(), LifecycleOwner {
+class VehicleDetailsActivity : AppCompatActivity() {
 
     private lateinit var mDetailBinding: ActivityVehicleDetailsBinding
     private lateinit var mViewModel: VehicleDetailsViewModel
