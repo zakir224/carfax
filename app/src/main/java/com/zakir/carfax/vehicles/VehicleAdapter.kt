@@ -1,28 +1,22 @@
 package com.zakir.carfax.vehicles
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.zakir.carfax.R
 import com.zakir.carfax.data.Vehicle
-
-import java.util.ArrayList
+import com.zakir.carfax.databinding.ItemVehicleViewBinding
+import java.util.*
 
 class VehicleAdapter(
     private var mVehicleListings: ArrayList<Vehicle.Listing>,
-    val mVehicleItemClickListener: VehicleItemClickListener
+    private val mVehicleItemClickListener: VehicleItemClickListener
 ) : RecyclerView.Adapter<VehicleAdapter.VehicleViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VehicleViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_vehicle_view, parent, false)
-        return VehicleViewHolder(view)
+        val listItemBinding = ItemVehicleViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return VehicleViewHolder(listItemBinding)
     }
 
     override fun onBindViewHolder(holder: VehicleViewHolder, position: Int) {
@@ -31,22 +25,22 @@ class VehicleAdapter(
                 " " + listing.model +
                 " " + listing.trim +
                 " " + listing.year
-        holder.mVehicleTitleView.text = s
-        holder.mVehicleMileageView.text = StringBuilder().append(listing.mileage).append(" mi").toString()
-        holder.mVehicleLocationView.text = StringBuilder()
-            .append(listing.dealer?.city).append(", ").append(listing.dealer?.state)
-        holder.mVehiclePriceView.text = String.format("%s", listing.listPrice)
+        holder.itemViewBinding.title = s
+        holder.itemViewBinding.mileage = StringBuilder().append(listing.mileage).append(" mi").toString()
+        holder.itemViewBinding.location = StringBuilder()
+            .append(listing.dealer?.city).append(", ").append(listing.dealer?.state).toString()
+        holder.itemViewBinding.price = String.format("%s", listing.listPrice)
         if (listing.images != null) {
             Glide.with(holder.itemView.context)
                 .load(listing.images?.firstPhoto?.large)
-                .into(holder.mVehicleImageView)
+                .into(holder.itemViewBinding.vehicleImageView)
         } else {
             Glide.with(holder.itemView.context)
                 .load(listing.firstPhoto)
-                .into(holder.mVehicleImageView)
+                .into(holder.itemViewBinding.vehicleImageView)
         }
 
-        holder.mCallDealerButton.setOnClickListener {
+        holder.itemViewBinding.callDealerButton.setOnClickListener {
             mVehicleItemClickListener.onCallButtonClick(listing.dealer?.phone!!)
         }
 
@@ -61,20 +55,13 @@ class VehicleAdapter(
     }
 
     override fun getItemCount(): Int {
-        return mVehicleListings!!.size
+        return mVehicleListings.size
     }
 
-    inner class VehicleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class VehicleViewHolder(var itemViewBinding: ItemVehicleViewBinding) :
+        RecyclerView.ViewHolder(itemViewBinding.root)
 
-        var mVehicleImageView: ImageView = itemView.findViewById(R.id.vehicleImageView)
-        var mVehicleTitleView: TextView = itemView.findViewById(R.id.vehicleTitleTextView)
-        var mVehiclePriceView: TextView = itemView.findViewById(R.id.vehiclePriceTextView)
-        var mVehicleMileageView: TextView = itemView.findViewById(R.id.vehicleMileageTextView)
-        var mVehicleLocationView: TextView = itemView.findViewById(R.id.vehicleLocationTextView)
-        var mCallDealerButton: Button = itemView.findViewById(R.id.callDealerButton)
-    }
-
-    public interface VehicleItemClickListener {
+    interface VehicleItemClickListener {
         fun onCallButtonClick(phoneNumber: String)
         fun onVehicleClick(listing: Vehicle.Listing)
     }

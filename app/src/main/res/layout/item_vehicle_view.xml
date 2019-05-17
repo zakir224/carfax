@@ -1,99 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_margin="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+        <variable name="title" type="String"/>
+        <variable name="price" type="String"/>
+        <variable name="mileage" type="String"/>
+        <variable name="location" type="String"/>
+    </data>
+
+    <androidx.cardview.widget.CardView
+            android:layout_margin="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <ImageView
-                android:layout_width="0dp"
-                android:layout_height="250dp"
-                tools:srcCompat="@tools:sample/avatars[4]"
-                android:id="@+id/vehicleImageView"
-                android:src="@android:color/holo_green_dark"
-                android:scaleType="centerCrop"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintDimensionRatio=""
-                />
 
-        <TextView
-                android:text="@string/car_name_placeholder"
-                style="@style/CarFaxTheme.VehicleListTextView.Bold"
-                android:id="@+id/vehicleTitleTextView"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/vehicleImageView"
-                android:layout_marginTop="8dp"
-                android:textColorHint="#00000000"/>
+            <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    tools:srcCompat="@tools:sample/avatars[4]"
+                    android:id="@+id/vehicleImageView"
+                    android:src="@android:color/holo_green_dark"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintDimensionRatio=""
+                    />
 
-        <TextView
-                android:text="@string/dollar_sign"
-                style="@style/CarFaxTheme.VehicleListTextView"
-                android:id="@+id/currencySignTextView"
-                app:layout_constraintStart_toStartOf="@+id/vehicleTitleTextView"
-                app:layout_constraintTop_toBottomOf="@+id/vehicleTitleTextView"
-                android:layout_marginTop="8dp"/>
+            <TextView
+                    android:text="@{title}"
+                    style="@style/CarFaxTheme.VehicleListTextView.Bold"
+                    android:id="@+id/vehicleTitleTextView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/vehicleImageView"
+                    android:layout_marginTop="8dp"
+                    android:textColorHint="#00000000"/>
 
-        <TextView
-                android:text="@string/price_placeholder"
-                style="@style/CarFaxTheme.VehicleListTextView"
-                android:id="@+id/vehiclePriceTextView"
-                app:layout_constraintStart_toEndOf="@+id/currencySignTextView"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/currencySignTextView"/>
+            <TextView
+                    android:text="@string/dollar_sign"
+                    style="@style/CarFaxTheme.VehicleListTextView"
+                    android:id="@+id/currencySignTextView"
+                    app:layout_constraintStart_toStartOf="@+id/vehicleTitleTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/vehicleTitleTextView"
+                    android:layout_marginTop="8dp"/>
 
-        <TextView
-                android:text="@string/vertical_divider"
-                style="@style/CarFaxTheme.VehicleListTextView"
-                android:id="@+id/textView4"
-                app:layout_constraintStart_toEndOf="@+id/vehiclePriceTextView"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/vehiclePriceTextView"/>
+            <TextView
+                    android:text="@{price}"
+                    style="@style/CarFaxTheme.VehicleListTextView"
+                    android:id="@+id/vehiclePriceTextView"
+                    app:layout_constraintStart_toEndOf="@+id/currencySignTextView"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/currencySignTextView"/>
 
-        <TextView
-                android:text="@string/mileage_placeholder"
-                style="@style/CarFaxTheme.VehicleListTextView"
-                android:id="@+id/vehicleMileageTextView"
-                app:layout_constraintStart_toEndOf="@+id/textView4"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView4"/>
+            <TextView
+                    android:text="@string/vertical_divider"
+                    style="@style/CarFaxTheme.VehicleListTextView"
+                    android:id="@+id/textView4"
+                    app:layout_constraintStart_toEndOf="@+id/vehiclePriceTextView"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/vehiclePriceTextView"/>
 
-        <TextView
-                android:id="@+id/vehicleLocationTextView"
-                android:text="@string/location_place_holder"
-                style="@style/CarFaxTheme.VehicleListTextView"
-                app:layout_constraintTop_toBottomOf="@+id/currencySignTextView"
-                app:layout_constraintStart_toStartOf="@+id/currencySignTextView"
-                android:layout_marginTop="8dp"/>
+            <TextView
+                    android:text="@{mileage}"
+                    style="@style/CarFaxTheme.VehicleListTextView"
+                    android:id="@+id/vehicleMileageTextView"
+                    app:layout_constraintStart_toEndOf="@+id/textView4"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView4"/>
 
-        <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                app:layout_constraintTop_toBottomOf="@+id/vehicleLocationTextView"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="#CECDCD"
-                android:id="@+id/horizontalLineView"
-                app:layout_constraintEnd_toEndOf="parent"/>
+            <TextView
+                    android:text="@{location}"
+                    android:id="@+id/vehicleLocationTextView"
+                    style="@style/CarFaxTheme.VehicleListTextView"
+                    app:layout_constraintTop_toBottomOf="@+id/currencySignTextView"
+                    app:layout_constraintStart_toStartOf="@+id/currencySignTextView"
+                    android:layout_marginTop="8dp"/>
 
-        <Button
-                android:id="@+id/callDealerButton"
-                android:text="@string/call_dealer_btn_text"
-                style="@style/CarFaxTheme.CallerButton"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/horizontalLineView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+            <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintTop_toBottomOf="@+id/vehicleLocationTextView"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="#CECDCD"
+                    android:id="@+id/horizontalLineView"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <Button
+                    android:id="@+id/callDealerButton"
+                    android:text="@string/call_dealer_btn_text"
+                    style="@style/CarFaxTheme.CallerButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/horizontalLineView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
