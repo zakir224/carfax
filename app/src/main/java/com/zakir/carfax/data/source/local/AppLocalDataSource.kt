@@ -33,7 +33,7 @@ class AppLocalDataSource private constructor(
     }
 
     override fun deleteAllListings() {
-
+        appExecutors.diskIO().execute{vehicleDao.deleteListing()}
     }
 
     override fun saveSearchArea(searchArea: Vehicle.SearchArea) {
@@ -41,7 +41,7 @@ class AppLocalDataSource private constructor(
     }
 
     override fun deleteSearchArea() {
-
+        appExecutors.diskIO().execute{searchDao.deleteSearchArea()}
     }
 
     override fun saveDealer(dealer: Vehicle.Dealer, loadDealerCallback: DataSource.LoadDealerCallback) {
@@ -59,7 +59,7 @@ class AppLocalDataSource private constructor(
     }
 
     override fun deleteAllDealers() {
-
+        appExecutors.diskIO().execute{dealerDao.deleteDealer()}
     }
 
 

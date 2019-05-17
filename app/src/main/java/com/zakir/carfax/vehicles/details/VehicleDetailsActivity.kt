@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,8 +15,6 @@ import com.zakir.carfax.R
 import com.zakir.carfax.VehicleViewModelFactory
 import com.zakir.carfax.data.Vehicle
 import com.zakir.carfax.vehicles.VehicleListActivity
-import com.zakir.carfax.vehicles.VehicleListViewModel
-import kotlinx.android.synthetic.main.activity_vehicle_details.*
 
 class VehicleDetailsActivity : AppCompatActivity() {
 
@@ -41,6 +40,20 @@ class VehicleDetailsActivity : AppCompatActivity() {
         setupViews()
         mViewModel = obtainViewModel(this)
 
+        setupObservers()
+        setVehicle(intent)
+
+    }
+
+    private fun setupObservers() {
+        mViewModel.getVehicle().observe(this, Observer {
+            updateViews(it)
+        })
+    }
+
+    private fun setVehicle(intent: Intent?) {
+        val vehicleId = intent?.getStringExtra(VehicleListActivity.VEHICLE)
+        mViewModel.setVehicleId(vehicleId!!)
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): VehicleDetailsViewModel {
@@ -52,20 +65,11 @@ class VehicleDetailsActivity : AppCompatActivity() {
         ).get(VehicleDetailsViewModel::class.java)
     }
 
-    override fun onResume() {
-        super.onResume()
-        val vehicleId = intent.getStringExtra(VehicleListActivity.VEHICLE)
-        mViewModel.setVehicleId(vehicleId)
-        mViewModel.getVehicle().observe(this, Observer {
-            updateViews(it)
-        })
-
-    }
-
     private fun updateViews(it: Vehicle.Listing?) {
         val title = """${it?.make} ${it?.model} ${it?.year} ${it?.trim}"""
         val mileage = "${it?.mileage} mi"
 
+        this.title = title
         mVehicleTitleView.text = title
         mVehiclePriceView.text = """${it?.currentPrice}"""
         mVehicleMileageView.text = mileage
@@ -83,13 +87,13 @@ class VehicleDetailsActivity : AppCompatActivity() {
         })
 
         mViewModel.shouldCallDealer().observe(this, Observer {
-            if(it) {
+            if (it) {
                 callPhone()
                 mViewModel.setDealerCallDone()
             }
         })
 
-        if(it.firstPhoto != null){
+        if (it.firstPhoto != null) {
             Glide.with(this)
                 .load(it.firstPhoto)
                 .into(mVehicleImageView)

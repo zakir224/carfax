@@ -7,20 +7,20 @@ import com.zakir.carfax.data.Vehicle
 import com.zakir.carfax.data.source.DataSource
 import com.zakir.carfax.data.source.Repository
 
-class VehicleDetailsViewModel(val mVehicleRepository: Repository) : ViewModel() {
+class VehicleDetailsViewModel(private val mVehicleRepository: Repository) : ViewModel() {
 
     private var mVehicleListing: MutableLiveData<Vehicle.Listing>? = null
     private var mVehicleDealer: MutableLiveData<Vehicle.Dealer>? = null
     private var mCallDealer: MutableLiveData<Boolean>? = null
 
-    public fun getVehicle(): LiveData<Vehicle.Listing>{
+    fun getVehicle(): LiveData<Vehicle.Listing>{
         if(mVehicleListing == null)
             mVehicleListing = MutableLiveData()
 
         return mVehicleListing!!
     }
 
-    public fun shouldCallDealer(): LiveData<Boolean>{
+    fun shouldCallDealer(): LiveData<Boolean>{
         if(mCallDealer == null)
             mCallDealer = MutableLiveData()
 
@@ -35,7 +35,7 @@ class VehicleDetailsViewModel(val mVehicleRepository: Repository) : ViewModel() 
         mCallDealer?.postValue(false)
     }
 
-    fun getDealer(id: Long): MutableLiveData<Vehicle.Dealer> {
+    fun getDealer(id: Long): LiveData<Vehicle.Dealer> {
         if(mVehicleDealer == null) {
             mVehicleDealer = MutableLiveData()
             fetchDealer(id)

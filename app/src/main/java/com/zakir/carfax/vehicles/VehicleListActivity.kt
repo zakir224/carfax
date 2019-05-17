@@ -12,6 +12,7 @@ import com.zakir.carfax.data.Vehicle
 import android.content.Intent
 import android.net.Uri
 import com.zakir.carfax.vehicles.details.VehicleDetailsActivity
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 
 class VehicleListActivity : AppCompatActivity(), VehicleAdapter.VehicleItemClickListener {
@@ -23,7 +24,7 @@ class VehicleListActivity : AppCompatActivity(), VehicleAdapter.VehicleItemClick
     override fun onVehicleClick(listing: Vehicle.Listing) {
         mViewModel.onVehicleItemClick(listing)
     }
-
+    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private lateinit var mViewModel: VehicleListViewModel
     private lateinit var mVehicleRecyclerView: RecyclerView
     private lateinit var mVehicleAdapter: VehicleAdapter
@@ -33,11 +34,14 @@ class VehicleListActivity : AppCompatActivity(), VehicleAdapter.VehicleItemClick
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupListView()
+
         mViewModel = obtainViewModel(this)
+
+        setupObservers()
+
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun setupObservers() {
         mViewModel.getVehicles().observe(this, Observer {
             mVehicleAdapter.setVehicles(it)
         })
@@ -49,7 +53,6 @@ class VehicleListActivity : AppCompatActivity(), VehicleAdapter.VehicleItemClick
         mViewModel.shouldShowDetailsActivity().observe(this, Observer {
             if (it.isNotEmpty()) {
                 openDetailsActivity(it)
-                mViewModel.openingDetails()
             }
         })
 
@@ -59,6 +62,29 @@ class VehicleListActivity : AppCompatActivity(), VehicleAdapter.VehicleItemClick
                 callPhone(mDealerPhone!!)
             }
         })
+
+        mViewModel.getLoading().observe(this, Observer {
+            if(it) {
+                showLoading()
+            } else{
+                hideLoading()
+            }
+        })
+
+        mSwipeRefreshLayout.setOnRefreshListener { mViewModel.onForceRefresh() }
+    }
+
+    private fun showLoading() {
+        mSwipeRefreshLayout.isRefreshing = true
+    }
+
+    private fun hideLoading() {
+        mSwipeRefreshLayout.isRefreshing = false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mViewModel.clearSelectedVehicleId()
     }
 
     private fun callPhone(mPhone: String) {
@@ -67,7 +93,7 @@ class VehicleListActivity : AppCompatActivity(), VehicleAdapter.VehicleItemClick
         startActivity(intent)
     }
 
-    public fun openDetailsActivity(id: String) {
+    private fun openDetailsActivity(id: String) {
         val intent = Intent(this, VehicleDetailsActivity::class.java)
         intent.putExtra(VEHICLE, id)
         startActivity(intent)
@@ -75,6 +101,7 @@ class VehicleListActivity : AppCompatActivity(), VehicleAdapter.VehicleItemClick
 
     private fun setupListView() {
         mVehicleRecyclerView = findViewById(R.id.vehicleListRecyclerView)
+        mSwipeRefreshLayout = findViewById(R.id.swipeToRefreshView)
         mVehicleRecyclerView.layoutManager = LinearLayoutManager(this)
         mVehicleAdapter = VehicleAdapter(ArrayList(), this)
         mVehicleRecyclerView.adapter = mVehicleAdapter
@@ -82,7 +109,6 @@ class VehicleListActivity : AppCompatActivity(), VehicleAdapter.VehicleItemClick
 
     private fun obtainViewModel(activity: AppCompatActivity): VehicleListViewModel {
         val mVehicleViewModelFactory = VehicleViewModelFactory.getInstance(application)
-
         return ViewModelProviders.of(activity, mVehicleViewModelFactory).get(VehicleListViewModel::class.java)
     }
 
